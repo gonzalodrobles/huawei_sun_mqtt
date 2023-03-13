@@ -1,7 +1,7 @@
 # Huawei SUN Jeedom Integration
 * Create a VM to run this code
 * Clone this repo on the VM
-* Install virtualenv `pip install virtualenv`
+* Install virtualenv `pip3 install python3-venv`
 * Create a virtual env `python3 -m virtualenv ./env`
 * Install prerequisites `pip install -r requirements.txt`
 * Rename conf_template.json to conf.json and update it (for DongleFE port=502 and slave=1, for huawei-sun Wifi port=6607 and slave=0)

@@ -1,3 +1,4 @@
+from datetime import datetime
 from huawei_solar import AsyncHuaweiSolar
 import asyncio
 import json
@@ -43,7 +44,6 @@ def publishMQTT(client,result):
     print("Data published to MQTT Broker!")
 
 def modbus2MQTT():
-    result = {}
     client = mqttClient.Client("huawei_solar")
     if jsonConf["mqtt"]["username"] != "":
         client.username_pw_set(jsonConf["mqtt"]["username"], password=jsonConf["mqtt"]["password"])
@@ -53,9 +53,11 @@ def modbus2MQTT():
     while mqttConnected != True:    #Wait for connection
         time.sleep(0.1)
     while True:
+        result = {}
+        result["last_refresh"] = [datetime.now().strftime('%Y-%m-%d %H:%M:%m')]
         getHuaweiData(jsonConf["lCommands"],result)
         publishMQTT(client,result)
-        print("next data sync on "+str(jsonConf["mqtt"]["topic_refresh"])+" seconds...")
+        print("Next data sync on "+str(jsonConf["mqtt"]["topic_refresh"])+" seconds...")
         time.sleep(jsonConf["mqtt"]["topic_refresh"])
 
 
