@@ -32,7 +32,8 @@ def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to broker")
         global mqttConnected                #Use global variable
-        mqttConnected = True                #Signal connection 
+        mqttConnected = True                #Signal connection
+        client.publish("huawei-sun/mqtt_available",1)
     else:
         print("Connection failed")
 mqttConnected = False   #global variable for the state of the connection
@@ -47,6 +48,7 @@ def modbus2MQTT():
     client = mqttClient.Client("huawei_solar")
     if jsonConf["mqtt"]["username"] != "":
         client.username_pw_set(jsonConf["mqtt"]["username"], password=jsonConf["mqtt"]["password"])
+    client.will_set("huawei-sun/mqtt_available", payload=0, qos=0, retain=False)
     client.connect(mqtt_broker_address, port=port)
     client.on_connect= on_connect
     client.loop_start()        #start the loop
